@@ -1,8 +1,9 @@
-document.getElementById("app").innerHTML = `
-<h1>Hello Parcel!</h1>
-<div>
-  Look
-  <a href="https://parceljs.org" target="_blank" rel="noopener noreferrer">here</a>
-  for more info about Parcel.
-</div>
-`;
+import initModel from "./Model";
+import update from "./Update";
+import view from "./View";
+import app from "./App";
+import "tachyons/css/tachyons.min.css";
+
+const node = document.getElementById("app");
+
+app(initModel, update, view, node);
