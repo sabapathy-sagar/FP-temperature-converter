@@ -2,7 +2,9 @@ import * as R from "rambda";
 
 const MSGS = {
   SET_LEFT_VALUE: "SET_LEFT_VALUE",
-  SET_RIGHT_VALUE: "SET_RIGHT_VALUE"
+  SET_RIGHT_VALUE: "SET_RIGHT_VALUE",
+  SET_LEFT_UNIT: "SET_LEFT_UNIT",
+  SET_RIGHT_UNIT: "SET_RIGHT_UNIT"
 };
 
 export const setLeftValue = leftValue => {
@@ -16,6 +18,20 @@ export const setRightValue = rightValue => {
   return {
     type: MSGS.SET_RIGHT_VALUE,
     rightValue
+  };
+};
+
+export const setLeftUnit = leftUnit => {
+  return {
+    type: MSGS.SET_LEFT_UNIT,
+    leftUnit
+  };
+};
+
+export const setRightUnit = rightUnit => {
+  return {
+    type: MSGS.SET_RIGHT_UNIT,
+    rightUnit
   };
 };
 
@@ -48,6 +64,18 @@ const update = (msg, model) => {
         ...model,
         rightValue,
         sourceLeft: false
+      };
+    case MSGS.SET_LEFT_UNIT:
+      const { leftUnit } = msg;
+      return {
+        ...model,
+        leftUnit
+      };
+    case MSGS.SET_RIGHT_UNIT:
+      const { rightUnit } = msg;
+      return {
+        ...model,
+        rightUnit
       };
     default:
       return model;
