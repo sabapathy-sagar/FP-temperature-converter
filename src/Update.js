@@ -50,9 +50,16 @@ const update = (msg, model) => {
         return { ...model, sourceLeft: true, leftValue: "", rightValue: "" };
       }
       const leftValue = toInt(msg.leftValue);
+      const { leftUnit, rightUnit } = model;
+      const rightValueConverted = calculateValue(
+        leftValue,
+        leftUnit,
+        rightUnit
+      );
       return {
         ...model,
         leftValue,
+        rightValue: rightValueConverted,
         sourceLeft: true
       };
     case MSGS.SET_RIGHT_VALUE:
@@ -60,25 +67,72 @@ const update = (msg, model) => {
         return { ...model, sourceLeft: false, leftValue: "", rightValue: "" };
       }
       const rightValue = toInt(msg.rightValue);
+
+      const leftValueConverted = calculateValue(
+        rightValue,
+        model.rightUnit,
+        model.leftUnit
+      );
       return {
         ...model,
+        leftValue: leftValueConverted,
         rightValue,
         sourceLeft: false
       };
     case MSGS.SET_LEFT_UNIT:
-      const { leftUnit } = msg;
+      const currentLeftUnit = msg.leftUnit;
+      const calculatedRightValue = calculateValue(
+        model.leftValue,
+        currentLeftUnit,
+        model.rightUnit
+      );
       return {
         ...model,
-        leftUnit
+        rightValue: calculatedRightValue,
+        leftUnit: currentLeftUnit
       };
     case MSGS.SET_RIGHT_UNIT:
-      const { rightUnit } = msg;
+      const currentRightUnit = msg.rightUnit;
+      const calculatedLeftValue = calculateValue(
+        model.rightValue,
+        currentRightUnit,
+        model.leftUnit
+      );
       return {
         ...model,
-        rightUnit
+        leftValue: calculatedLeftValue,
+        rightUnit: currentRightUnit
       };
     default:
       return model;
+  }
+};
+
+const calculateValue = (inputVal, from, to) => {
+  if (from === to) {
+    return inputVal;
+  }
+  switch (from) {
+    case "Celsius":
+      if (to === "Fahrenheit") {
+        return inputVal + 32;
+      } else if (to === "Kelvin") {
+        return inputVal + 273.15;
+      }
+    case "Fahrenheit":
+      if (to === "Celsius") {
+        return inputVal - 32;
+      } else if (to === "Kelvin") {
+        return inputVal - 32 + 273.15;
+      }
+    case "Kelvin":
+      if (to === "Celsius") {
+        return inputVal - 273.15;
+      } else if (to === "Fahrenheit") {
+        return inputVal - 273.15 + 32;
+      }
+    default:
+      return 0;
   }
 };
 
