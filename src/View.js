@@ -3,6 +3,7 @@ import { h } from "virtual-dom";
 import * as R from "rambda";
 
 import { setLeftValue } from "./Update";
+import { setRightValue } from "./Update";
 
 //the pre function creates the pre tag which is used for
 //preformatted text
@@ -38,7 +39,7 @@ const view = (dispatch, model) =>
     h1({ className: "f2 pv2 bb" }, "Temperature Unit Converter"),
     div({ className: "flex" }, [
       unitSection(dispatch, model.leftUnit, model.leftValue, setLeftValue),
-      unitSection(dispatch, model.rightUnit, model.rightValue)
+      unitSection(dispatch, model.rightUnit, model.rightValue, setRightValue)
     ]),
     pre(JSON.stringify(model, null, 2))
   ]);
