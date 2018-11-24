@@ -19,19 +19,35 @@ export const setRightValue = rightValue => {
   };
 };
 
+//a helper function to convert strings to integer
+//if str is falsy then return 0 as the default
+const toInt = str =>
+  R.pipe(
+    parseInt,
+    R.defaultTo(0)
+  )(str);
+
 const update = (msg, model) => {
   switch (msg.type) {
     case MSGS.SET_LEFT_VALUE:
-      const { leftValue } = msg;
+      if (msg.leftValue === "") {
+        return { ...model, sourceLeft: true, leftValue: "", rightValue: "" };
+      }
+      const leftValue = toInt(msg.leftValue);
       return {
         ...model,
-        leftValue
+        leftValue,
+        sourceLeft: true
       };
     case MSGS.SET_RIGHT_VALUE:
-      const { rightValue } = msg;
+      if (msg.rightValue === "") {
+        return { ...model, sourceLeft: false, leftValue: "", rightValue: "" };
+      }
+      const rightValue = toInt(msg.rightValue);
       return {
         ...model,
-        rightValue
+        rightValue,
+        sourceLeft: false
       };
     default:
       return model;
